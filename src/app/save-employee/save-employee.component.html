@@ -1,0 +1,94 @@
+<div style="position: fixed; z-index: 10; background-color: black; color: white; overflow: hidden;" class="ui-g-12">
+  <h3 style="text-align: center; ">Employee Details</h3>
+</div>
+<br />
+
+<div style="padding-left: 2.5em; padding-top: 3em; padding-right: 2.5em; padding-bottom: 1em">
+  <div style="align-content: center; padding-left: 35%; padding-right: 35%; ">
+    <form #newEmpForm="ngForm">
+      <!-- Employee ID -->
+      <div class="form-group">
+        <label for="empId">Employee ID</label>
+        <input type="text" #empId="ngModel" pattern="^[a-zA-Z0-9]{8}$" name="empId" id="empId" [(ngModel)]="new_employee.employee_id"
+          class="form-control" required>
+        <div *ngIf="empId.dirty || empId.touched"  style="color: red; padding-top: 1em">
+          <div *ngIf="empId.errors?.required">Employee Id is required</div>
+          <div *ngIf="empId.errors?.pattern">Must be of 8 alphanumeric characters</div>
+        </div>
+      </div>
+
+      <!-- First Name -->
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" #firstName="ngModel" pattern="^[a-zA-Z]*$" maxlength="10" name="firstName" id="firstName" [(ngModel)]="new_employee.first_name"
+          class="form-control" required>
+        <div *ngIf="firstName.dirty || firstName.touched"  style="color: red; padding-top: 1em">
+          <div *ngIf="firstName.errors?.required">First Name is required</div>
+          <div *ngIf="firstName.errors?.pattern">Must be of only alphabets</div>
+        </div>
+      </div>
+
+      <!-- Last Name -->
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" #lastName="ngModel" pattern="^[a-zA-Z]*$" maxlength="10" name="lastName" id="lastName" [(ngModel)]="new_employee.last_name"
+          class="form-control" required>
+        <div *ngIf="lastName.dirty || lastName.touched"  style="color: red; padding-top: 1em">
+          <div *ngIf="lastName.errors?.required">Last Name is required</div>
+          <div *ngIf="lastName.errors?.pattern">Must be of only alphabets</div>
+        </div>  
+      </div>
+
+      <!-- Department -->
+      <div class="form-group">
+        <label for="dept">Department</label>
+        <input type="text" #dept="ngModel" pattern="^[a-zA-Z0-9_-]{7}$" name="dept" id="dept" [(ngModel)]="new_employee.department"
+          class="form-control" required>
+        <div *ngIf="dept.dirty || dept.touched"  style="color: red; padding-top: 1em">
+          <div *ngIf="dept.errors?.required">Department is required</div>
+          <div *ngIf="dept.errors?.pattern">Must be of 7 alphanumeric characters</div>
+        </div>
+      </div>
+
+      <!-- DOB -->
+      <div class="form-group">
+        <label for="dob">Date of birth</label><br/>
+        <p-calendar inputId="dob" #dob="ngModel" appendTo="body" name="dob" id="dob" [(ngModel)]="new_employee.dob" [readonlyInput]="false"
+          dateFormat="dd/mm/yy" showButtonBar="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
+          [inputStyle]="{'width':'220%', 'border-color': 'lightgray'}" required>
+        </p-calendar>
+        <div *ngIf="(dob.dirty || dob.touched) && dob.errors?.required" style="color: red; padding-top: 1em">
+            Date of Birth is required
+        </div>
+      </div>
+
+      <!-- Mobile no -->
+      <div class="form-group">
+        <label for="mobile">Mobile No.</label>
+        <input type="number" #mobile="ngModel" pattern="^[1-9][0-9]{9}$" name="mobile" id="mobile" [(ngModel)]="new_employee.mobile"
+          class="form-control" required>
+        <div *ngIf="mobile.dirty || mobile.touched" style="color: red; padding-top: 1em">
+          <div *ngIf="mobile.errors?.required">Mobile Number is required</div>
+          <div *ngIf="mobile.errors?.pattern">Must be of 10 numbers</div>  
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="form-group">
+        <label for="address">Address</label><br/>
+        <textarea name="address" style="border-color: lightgray; border-radius:3px"
+         id="address" [rows]="5" [cols]="51" maxlength="100" [(ngModel)]="new_employee.address" autoResize="autoResize" pInpuTextarea>
+        </textarea>
+      </div>
+
+      <p-button label="Save" (click)="saveEmployee(); newEmpForm.reset();" icon="pi pi-check" [disabled]="!newEmpForm.valid" styleClass="ui-button-raised ui-button-success"></p-button>
+      &nbsp; &nbsp;
+      <p-button label="Reset" (click)="newEmpForm.reset();" icon="pi pi-refresh" styleClass="ui-button-raised ui-button-danger"></p-button>
+      &nbsp; &nbsp;
+      <p-button label="Show All Employees" (click)="showEmployee()" icon="pi pi-chevron-right" styleClass="ui-button-raised"></p-button>
+    </form>
+  </div>
+</div>
+
+<!-- --- Message for notification --- -->
+<p-toast></p-toast>

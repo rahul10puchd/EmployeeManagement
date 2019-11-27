@@ -1,0 +1,66 @@
+<div style="position: fixed; z-index: 10; background-color: black; color: white; overflow: hidden;" class="ui-g-12">
+  <h3 style="text-align: center; ">Employee Records Table</h3>
+</div>
+<br />
+<div style="padding-left: 2.5em; padding-top: 2.5em; padding-right: 2.5em; padding-bottom: 1em">
+  <div style="margin-top : 32px">
+    <!-- -- Table of Employees -- -->
+    <p-table #empTable [columns]="cols" [value]="employees" [paginator]="employees?.length > 0" [rows]="10"
+      [rowsPerPageOptions]="[5,10,20,30]" stickyHeader >
+      <!-- <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [style.width]="col.width">
+        </colgroup>
+      </ng-template> -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+            {{col.header}}
+            <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="true" class="ui-fluid">
+            <div *ngSwitchCase="col.field == 'dob'">
+              <p-calendar appendTo="body" [(ngModel)]="dateFilters" selectionMode="range" dateFormat="dd/mm/yy"
+                showButtonBar="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="1900:2100"
+                (onSelect)="empTable.filter(dateFilters, col.field, 'between')" (onClearClick)="empTable.reset()"
+                [inputStyle]="{
+                'box-sizing': 'border-box',
+                'border': 'groove',
+                'border-radius': '3px',
+                'height' : '100%'}">
+              </p-calendar>
+            </div>
+            <div *ngSwitchDefault>
+              <input pInputText type="text" (input)="empTable.filter($event.target.value, col.field, 'contains')"
+                [value]="empTable.filters[col.field]?.value" class="input-res">
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-emp let-columns="columns">
+        <tr>
+          <td *ngFor="let col of columns;" [ngSwitch]="true">
+            <div *ngSwitchCase="col.field == 'dob'">
+              {{emp[col.field] | date:'dd/MM/yyyy'}}
+            </div>
+            <div *ngSwitchDefault>
+              {{emp[col.field]}}
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        There are total {{employees?.length || 0}} employees.
+      </ng-template>
+    </p-table>
+
+    <br />
+    <p-button label="Go back to previous page" (click)="goToPreviousPage()" icon="pi pi-chevron-left"
+      styleClass="ui-button-raised"></p-button>
+  </div>
+
+</div>
